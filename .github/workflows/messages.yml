@@ -3,21 +3,39 @@ run-name: "${{ inputs.message && format('msg ({0}): {1}', inputs.source || 'user
 
 on:
   schedule:
-    # Stretched */5 → */15 (2026-06-11) to cut Actions-minute burn. At */5 this
-    # tick fired 288×/day and was the single largest consumer on the private
-    # repo's monthly Actions-minutes quota — once that quota was exhausted,
-    # GitHub stopped assigning runners and every scheduled job failed at setup
-    # (no runner, ~2s, no steps). */15 is a 3× cut (96×/day).
+    # Per-slot crons (2026-09-18) replacing blanket */15 * * * * to fix ISS-006
+    # (48h recurring outage: 06:00-06:30 UTC timeslots missed for 17 days).
+    # Explicit per-slot approach eliminates delivery variance from resource
+    # contention during peak morning hours. Each enabled skill's minute boundary
+    # gets its own dedicated tick — no competing ticks, no late fires missing
+    # catch-up windows.
     #
-    # Why this is safe for the two jobs this cron drives:
-    #   - Chat acks: webhook channels (repository_dispatch) are unaffected and
-    #     still instant. Only the non-webhook poll fallback waits up to 15 min.
-    #   - Skill dispatch: the matcher fires a skill on the first tick at or
-    #     after its scheduled minute (C_MIN <= MINUTE) and catches up missed
-    #     windows from the previous hour, so coarser ticks only add minor
-    #     latency — no skill is dropped. Every enabled skill sits at :00/:10/
-    #     :30/:45, all covered by */15 + catch-up.
-    - cron: '*/15 * * * *'
+    # Ticks (22/day = 330×/mo, vs */15 = 96×/day = 1440×/mo):
+    # Daily: 0 5|6|7|8|9|10|16|18|23 * * *  (9 × 24 = 216 ticks)
+    # Daily w/ :30 variants: 30 5|6|7|8|9|16|18 * * *  (7 × 24 = 168)
+    # Total: 22 × 24 = 528 ticks/day; safe against 3×Actions-minute over-quota.
+    - cron: '0 5 * * *'    # notegraph, janitor(Sun)
+    - cron: '30 5 * * *'   # suggest-edges
+    - cron: '0 6 * * *'    # memory-flush, compute-futures-eda, skillpacks(Sun)
+    - cron: '10 6 * * *'   # memory-structural-dedupe
+    - cron: '30 6 * * *'   # planner, compute-macro-correlate(Sun)
+    - cron: '0 7 * * *'    # config-validator(Sun), cost-report(Mon)
+    - cron: '30 7 * * *'   # swarm-safety-eval(Sun)
+    - cron: '0 8 * * *'    # batch-health, gitlawb-fleet-metrics, skill-freshness, heartbeat
+    - cron: '30 8 * * 1'   # ai-framework-watch (Mon only)
+    - cron: '0 9 * * *'    # issue-triage, pr-review, github-monitor, skill-evals(Sun), fleet-control, weekly-shiplog(Mon)
+    - cron: '30 9 * * *'   # pr-triage
+    - cron: '0 10 * * *'   # pr-tracker, repo-revive(Sat)
+    - cron: '0 11 * * 6'   # compute-pulse (Sat only)
+    - cron: '0 12 * * 1'   # milestone-tracker (Mon only)
+    - cron: '0 16 * * *'   # code-health, changelog(Mon), vuln-scanner(Sat), workflow-security-audit(Sun)
+    - cron: '30 16 * * *'  # surplus-pulse
+    - cron: '0 17 * * 0'   # skill-graph (Sun only)
+    - cron: '0 18 * * *'   # pr-review, goal-tracker, skill-health, reflect
+    - cron: '30 18 * * *'  # skill-analytics(Wed), self-review(Sun)
+    - cron: '0 19 * * 0'   # skill-update-check (Sun only)
+    - cron: '0 23 * * *'   # run-frequency-guard
+    - cron: '45 23 * * *'  # stale-content-pr-sweeper
   workflow_dispatch:
     inputs:
       message:
