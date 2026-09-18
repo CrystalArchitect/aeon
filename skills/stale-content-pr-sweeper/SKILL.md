@@ -49,9 +49,9 @@ In a single small Node block, group eligible PRs by branch prefix:
 const TRACKED = [
   "notegraph", "suggest-edges", "weekly-shiplog", "changelog",
   "code-health", "compute-futures-eda", "compute-pulse",
-  "compute-macro-correlate", "runpod-spot-pricing", "surplus-pulse",
+  "compute-macro", "skill-graph", "runpod-spot-pricing", "surplus-pulse",
 ];
-const ALLOWED_AUTHORS = new Set(["aeonframework"]);
+const ALLOWED_AUTHORS = new Set(["aeonframework", "app/github-actions"]);
 const DATE_RE = /^(\d{4}-\d{2}-\d{2})$/;
 
 const prs = JSON.parse(fs.readFileSync("/tmp/sweeper-open-prs.json", "utf8"));
