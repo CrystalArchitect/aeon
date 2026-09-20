@@ -244,13 +244,13 @@
   },
   "fleet-control": {
     "last_status": "failed",
-    "last_failed": "2026-09-20T21:00:36Z",
-    "total_runs": 288,
+    "last_failed": "2026-09-20T21:14:51Z",
+    "total_runs": 289,
     "total_successes": 73,
-    "total_failures": 215,
-    "consecutive_failures": 42,
+    "total_failures": 216,
+    "consecutive_failures": 43,
     "success_rate": 0.25,
-    "last_error": "requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"dep",
+    "last_error": "\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"de",
     "last_success": "2026-09-11T09:56:02Z",
     "last_dispatch": "2026-09-11T09:53:57Z"
   },
