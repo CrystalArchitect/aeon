@@ -353,13 +353,13 @@
   },
   "self-review": {
     "last_status": "failed",
-    "last_failed": "2026-10-04T15:13:19Z",
-    "total_runs": 465,
+    "last_failed": "2026-10-04T19:19:56Z",
+    "total_runs": 466,
     "total_successes": 11,
-    "total_failures": 454,
-    "consecutive_failures": 314,
+    "total_failures": 455,
+    "consecutive_failures": 315,
     "success_rate": 0.02,
-    "last_error": "\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"de",
+    "last_error": "requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"dep",
     "last_success": "2026-08-30T18:48:35Z",
     "last_dispatch": "2026-08-30T18:41:59Z"
   },
