@@ -117,6 +117,14 @@ When writing new skills, always include a "Sandbox note" section with the approp
 - Never expose secrets in file content — use environment variables.
 - Never run destructive commands like `rm -rf /`.
 
+## Cloud Agent
+
+The local app is the Next.js dashboard. Dependencies install with `npm ci --prefix dashboard`, `npm ci --prefix a2a-server`, and `npm ci --prefix mcp-server`. The dev server is `npm run dev -- --hostname 0.0.0.0 --port 5555` from `dashboard/`, at http://localhost:5555. `./aeon` is the interactive launcher and exits unless `gh auth status` succeeds.
+
+Without both `GITHUB_TOKEN` and `GITHUB_REPO`, dashboard `/api/*` routes read and write the local checkout. Setting both switches those routes to the GitHub contents API. A skill toggle rewrites `aeon.yml` and can drop spacing before trailing comments.
+
+Typecheck with `npx tsc --noEmit` in `dashboard`, `a2a-server`, and `mcp-server`. Tests: `node --test tests/*.test.mjs` in `prototypes/compute-futures`, `node --test scripts/fleet-executors/*.test.mjs`, and `node --test prototypes/gitlawb-safety/*.test.mjs`. The dashboard API gate test is `npx tsx --test dashboard/lib/security/api-gate.test.ts` from the repo root. `tsx` is not a dashboard dependency.
+
 ## Output
 
 After completing any task, end with a `## Summary` listing what you did, files created/modified, and follow-up actions needed.
